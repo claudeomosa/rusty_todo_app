@@ -1,38 +1,33 @@
-#[allow(unused_variables, dead_code, unused_imports)]
-
-mod todo;
+mod processes;
 mod state;
-use std::env;
-use state::{write_to_file, read_file};
+mod todo;
+use processes::process_input;
 use serde_json::value::Value;
-use serde_json::{Map, json};
-use todo::structs::done::Done;
-use todo::structs::pending::Pending;
+use serde_json::Map;
+use state::read_file;
+use std::env;
 
 use crate::todo::enums::TaskStatus;
 use crate::todo::todo_factory;
-use crate::todo::traits::get::Get;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
-    let status: &String = &args[1];
+    let command: &String = &args[1];
     let name: &String = &args[2];
-    let mut state: Map<String, Value> = read_file("./state.json");
-    // println!("Before: {:?}", state);
-    state.insert(name.to_string(), json!(status));
-    // println!("After: {:?}", state);
-    write_to_file("./state.json", &mut state);
 
+    let state: Map<String, Value> = read_file("./state.json");
+    let status: String;
 
-    let pending_task = Pending::new("a pending task");
-    let done_task = Done::new("a done task");
+    match &state.get(*&name) {
+        Some(result) => {
+            status = result.to_string().replace('\"', "");
+        }
+        None => {
+            status = "pending".to_owned();
+        }
+    }
 
-    let item_types = todo_factory("task name", TaskStatus::PENDING);
-    
+    let item = todo_factory(name, TaskStatus::from_string(status.to_uppercase()));
 
-    // println!("{:#?}", pending_task);
-    println!("{:#?}", done_task.get(&String::from("beevs"), &state));
-    // println!("{:#?}", item_types);
-
-
+    process_input(item, command.to_string(), &state);
 }
