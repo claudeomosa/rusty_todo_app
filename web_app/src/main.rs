@@ -1,6 +1,9 @@
 // The entry point for the server where the server is defined
 use actix_web::{App, HttpServer };
 mod views;
+mod todo;
+mod processes;
+mod state;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
