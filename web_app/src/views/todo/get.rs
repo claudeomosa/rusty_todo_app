@@ -1,9 +1,9 @@
 use actix_web::{web, Responder};
-use serde_json::{Map, value::Value};
+use serde_json::{value::Value, Map};
 
-use crate::state::read_file;
-use crate::todo::{ItemTypes, todo_factory, enums::TaskStatus};
 use crate::json_serialization::todo_items::ToDoItems;
+use crate::state::read_file;
+use crate::todo::{enums::TaskStatus, todo_factory, ItemTypes};
 
 pub async fn get() -> impl Responder {
     // let state: Map<String, Value> = read_file("./state.json");

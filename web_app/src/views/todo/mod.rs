@@ -1,11 +1,13 @@
 mod create;
+mod edit;
 mod get;
-use actix_web::web::{ServiceConfig, get, post, scope};
+use actix_web::web::{get, post, scope, ServiceConfig};
 
-pub fn todo_views_factory(app: &mut ServiceConfig){
+pub fn todo_views_factory(app: &mut ServiceConfig) {
     app.service(
         scope("app/items")
-        .route("/", get().to(get::get))
-        .route("create/{name}", post().to(create::create))
+            .route("/", get().to(get::get))
+            .route("create/{name}", post().to(create::create))
+            .route("edit", post().to(edit::edit)),
     );
 }
