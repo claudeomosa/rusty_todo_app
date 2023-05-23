@@ -8,11 +8,11 @@ pub enum TaskStatus {
 
 impl TaskStatus {
     pub fn new(name: &str) -> Self {
-       match name {
-        "DONE" => TaskStatus::DONE,
-        "PENDING" => TaskStatus::PENDING,
-        _ => panic!("Input {} not supported", name),
-       }
+        match name {
+            "DONE" => TaskStatus::DONE,
+            "PENDING" => TaskStatus::PENDING,
+            _ => panic!("Input {} not supported", name),
+        }
     }
     pub fn stringify(&self) -> String {
         match &self {

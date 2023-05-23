@@ -1,7 +1,7 @@
+use crate::jwt::JwToken;
 use actix_web::{web, HttpResponse};
 use serde_json::value::Value;
 use serde_json::Map;
-use crate::jwt::JwToken;
 
 use crate::state::read_file;
 
@@ -18,9 +18,7 @@ pub async fn edit(item: web::Json<ToDoItem>, token: JwToken) -> HttpResponse //i
         Some(result) => {
             status = TaskStatus::new(result.as_str().unwrap());
         }
-        None => {
-            return HttpResponse::NotFound().json(format!("{} not found in state", &item.name))
-        }
+        None => return HttpResponse::NotFound().json(format!("{} not found in state", &item.name)),
     }
     let existing_item = todo_factory(item.name.as_str(), status.clone());
     if &status.stringify() == &TaskStatus::from_string(item.status.as_str().to_string()).stringify()
